@@ -1,0 +1,9 @@
+#/bin/bash
+# Assuming it's found on your path before /usr/bin, prevents running git from docker
+
+if (( $(ps aux | grep -c systemd) == 1 )); then
+  echo "Git should not be run from docker."
+  exit 1
+fi
+
+/usr/bin/git "$@"
