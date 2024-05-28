@@ -1,0 +1,23 @@
+[user]
+	email = rspauldi@amd.com
+	name = Randy J. Spaulding
+[core]  
+    editor = nano
+[alias]
+	aa = add --all
+	bv = branch -v --sort=committerdate
+	cm = commit -m
+	co = checkout
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	ld = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph
+	ln = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph -n 
+	l8 = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph -n 8
+	l5 = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph -n 5
+	ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+	nb = checkout -b
+	ou = config --get remote.origin.url
+	ph = push -u origin HEAD
+	pu = push -u origin
+	rf = checkout HEAD --
+	so = remote set-url origin
+	st = status --short --branch
