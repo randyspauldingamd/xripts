@@ -10,6 +10,9 @@ if [ $# == 0 ]; then
   apt install -y bash-completion nano
 fi
 
+export USER=$( echo $PWD | awk -F/ '{print $3}' )
+export PATH=/home/$USER/scripts:$PATH
+
 . /etc/bash_completion
 alias edit='nano -l'
 
@@ -30,10 +33,11 @@ function mt() {
 }
 
 function mkb() {
-  mkdir build ; cd build
+  mkdir -p build ; cd build
+  mv ./CMakeCache.txt ./oldCache.txt
 }
 
 function cmk() {
-  export CXX=/opt/rocm/llvm/bin/clang++ && cmake -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" ..
+  export CXX=/opt/rocm/llvm/bin/clang++ && cmake -DMIOPEN_TEST_ALL=ON -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" $1 $2 $3 $4 $5 $6 ..
 }
 
