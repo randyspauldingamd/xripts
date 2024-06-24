@@ -18,12 +18,25 @@ alias edit='nano -l'
 
 alias tgts='cmake --build . --target help | grep -v -e "\btest_" -e "\btidy" -e "\bgenerate" | sed "s/\.\.\. //" '
 
+function curdir() {
+  mydir=${PWD##*/}
+}
+
+function in_build() {
+  if [ "${PWD##*/}" == "build" ]; then return 0; fi
+  return 1
+}
+
+function has_build() {
+  if [ -d "build" ]; then return 0; fi
+  return 1
+}
+
 function mt() {
-# TODO test this part and finish it
-#  if [ "$(PWD##*/)" != "build" ]; then
-#    echo "I can only be run from a directory called 'build' that has been initialized by CMake"
-#    return 1
-#  fi
+  if ! in_build; then
+    echo "I can only be run from a directory called 'build' that has been initialized by CMake"
+    return 1
+  fi
 
   test=$1
   if [ $test != test* ]; then
@@ -41,3 +54,51 @@ function cmk() {
   export CXX=/opt/rocm/llvm/bin/clang++ && cmake -DMIOPEN_TEST_ALL=ON -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" $1 $2 $3 $4 $5 $6 ..
 }
 
+function get_miotag() {
+  curdir
+  if [[ ! $mydir =~ .*-MIOpen$ ]]; then
+    return 1
+  fi
+  miotag=${mydir%-*}
+}
+
+function bstash() {
+  if in_build; then cd ..; fi
+  if ! has_build; then
+    echo "Unable to find build directory, aborting"
+    return 1
+  fi
+  curdir
+  if ! get_miotag; then
+    echo "Aborting, directory must match <id>-MIOpen"
+    return 1
+  fi
+  tmpdir=../${miotag}tmp/build
+  rm -r $tmpdir.1 &> /dev/null
+  mv $tmpdir $tmpdir.1 &> /dev/null
+  mv ./build $tmpdir
+}
+
+function brestore() {
+  if in_build; then
+    echo "Aborting--already in build folder"
+    return 1
+  fi
+  if has_build; then
+    echo "Aborting--a build folder already exists"
+    return 1
+  fi
+  if ! get_miotag; then
+    echo "Aborting--directory must match <id>-MIOpen"
+    return 1
+  fi
+  tmpdir=../${miotag}tmp/build
+  if [ ! -d $tmpdir ]; then
+    tmpdir=$tmpdir.1
+    if [ ! -d $tmpdir ]; then
+      echo "Aborting; '$tmpdir' not found"
+      return 1
+    fi
+  fi
+  mv $tmpdir .
+}
