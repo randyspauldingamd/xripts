@@ -15,9 +15,11 @@
 	l5 = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph -n 5
 	ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
 	nb = checkout -b
-	ou = config --get remote.origin.url
+	oset = remote set-url origin
+	ourl = config --get remote.origin.url
 	ph = push -u origin HEAD
 	pu = push -u origin
 	rf = checkout HEAD --
-	so = remote set-url origin
+	rh = reset --hard
 	st = status --short --branch
+	up = remote add upstream 
