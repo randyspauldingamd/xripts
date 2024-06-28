@@ -44,5 +44,10 @@ if [ $# -lt 2 ]; then   # TODO: check for 'once'
 	echo "$miopen_tag" > $last_image_file
 fi
 
+SU=
+if [ "$HOSTNAME" = shemp ]; then
+  SU=sudo
+fi
+
 # launch the container
-docker run -w $wd -v $wd:$wd -it --privileged --device=/dev/kfd --device=/dev/dri rocm/miopen:$miopen_tag
+$SU docker run -w $wd -v $wd:$wd -it --privileged --device=/dev/kfd --device=/dev/dri rocm/miopen:$miopen_tag
