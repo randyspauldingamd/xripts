@@ -51,11 +51,13 @@ function mkb() {
 }
 
 MIOPEN_TEST=MIOPEN_TEST_ALL
+sudocmd=
 if [ "$HOSTNAME" = shemp ]; then
   MIOPEN_TEST=MIOPEN_TEST_GFX103X
+  sudocmd=sudo
 fi
 function cmk() {
-  export CXX=/opt/rocm/llvm/bin/clang++ && cmake -D$MIOPEN_TEST=1 -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" $1 $2 $3 $4 $5 $6 ..
+  export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" $1 $2 $3 $4 $5 $6 ..
 }
 
 function get_miotag() {
