@@ -11,7 +11,7 @@ if [ $# == 0 ]; then
 fi
 
 export USER=$( echo $PWD | awk -F/ '{print $3}' )
-export PATH=/home/$USER/scripts:$PATH
+export PATH=/home/$USER/xripts:/home/$USER/scripts:$PATH
 
 . /etc/bash_completion
 alias edit='nano -l'

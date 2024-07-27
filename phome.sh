@@ -1,22 +1,25 @@
 #!/bin/bash
 
 if [ $# -eq 0 ]; then
-  echo "$0 should be run from your home directory. Enter '$0 go' to execute it."
+  echo "phome should be run from your home directory. Enter 'phome go' to execute it from here."
   [ "$BASH_SOURCE" == "$0" ] &&
     exit 1
   return 1
 fi
 
 files=(._aliases .gitconfig)
+
 for file in ${files[@]}; do
-  cp scripts/$file .
+  cp $file $file.bak
+  cp xripts/$file .
 done
 
-[ "$BASH_SOURCE" == "$0" ] &&
-  exit 0
+# TODO: finish fancier version. quick exit for now
 return 0
 
-# TODO: finish fancier version
+#[ "$BASH_SOURCE" == "$0" ] &&
+#  exit 0
+
 script_dir=$(dirname $0)
 data_dir=${script_dir}/data
 mkdir -p ${data_dir}
