@@ -7,11 +7,11 @@ alias Dil='docker image list | grep rocm/miopen | grep ci_'
 alias scr='screen -r'
 alias sco='screen -d -r'
 
-export PATH=/home/rspauldi/scripts:$PATH
+export PATH=/home/rspauldi/xripts:$PATH
 export DISPLAY=172.31.137.88:0
 
 export Hm=/home/rspauldi
-export Sc=$hm/scripts
+export Sc=$hm/xripts
 
 export fw11=rocm-framework-11
 export fw11ip=10.227.26.223
@@ -25,7 +25,7 @@ export rack4ip=10.216.80.104
 export ghRJS=git@github.com:randyspauldingamd/MIOpen.git
 export ghMIOPEN=git@github.com:ROCm/MIOpen.git
 
-# moved to scripts/ssha.sh
+# moved to xripts/ssha.sh
 # eval "$(ssh-agent -s)"
 # ssh-add ~/.ssh/github_ecdsa
 
