@@ -49,5 +49,8 @@ if [ "$HOSTNAME" = shemp ]; then
   SU=sudo
 fi
 
+# get a random name ala https://devops.stackexchange.com/questions/9810/how-to-get-the-next-friendly-name-that-docker-will-assign-to-the-container-it-wi
+DKR_NAME=$(curl -s https://frightanic.com/goodies_content/docker-names.php)
+
 # launch the container
-$SU docker run -w $wd -v $wd:$wd -it --privileged --device=/dev/kfd --device=/dev/dri rocm/miopen:$miopen_tag
+$SU docker run -w $wd -v $wd:$wd -it --name $DKR_NAME --hostname $DKR_NAME --privileged --device=/dev/kfd --device=/dev/dri rocm/miopen:$miopen_tag
