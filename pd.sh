@@ -57,7 +57,46 @@ if [ "$HOSTNAME" = shemp ]; then
   sudocmd=sudo
 fi
 function cmk() {
-  export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" $1 $2 $3 $4 $5 $6 ..
+  export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" -DBUILD_DEV=1 $1 $2 $3 $4 $5 $6 ..
+}
+function dmk() {
+  export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 -DCMAKE_BUILD_TYPE=Debug -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" -DBUILD_DEV=1 $1 $2 $3 $4 $5 $6 ..
+}
+
+function fix_test() {
+  if [ $# -lt 1 ]; then
+    return 1
+  fi
+
+  TEST=$1
+  if [[ ${TEST} != *"bin/test_"* ]]; then
+    TEST="bin/test_"$TEST
+  fi
+
+  echo $TEST
+  return 0
+}
+
+function gtf() {
+  if [ $# -lt 2 ]; then
+    echo 'Usage: # gtf [bin/test_]mytest "suiteA*:suiteB*-fixtureC*"'
+    echo '   -->   bin/test_mytest --gtest_filter="suiteA*:suiteB*-fixtureC*"'
+    return 1
+  fi
+
+  TEST=$(fix_test $1)
+  $TEST --gtest_filter="$2"
+}
+
+function gtlt() {
+  if [ $# -lt 1 ]; then
+    echo 'Usage: # gtlt [bin/test_]mytest'
+    echo '   -->   bin/test_mytest --gtest_list_tests'
+    return 1
+  fi
+
+  TEST=$(fix_test $1)
+  $TEST --gtest_list_tests
 }
 
 function get_miotag() {
