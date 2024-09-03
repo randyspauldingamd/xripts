@@ -53,4 +53,6 @@ fi
 DKR_NAME=$(curl -s https://frightanic.com/goodies_content/docker-names.php)
 
 # launch the container
-$SU docker run -w $wd -v $wd:$wd -it --name $DKR_NAME --hostname $DKR_NAME --privileged --device=/dev/kfd --device=/dev/dri rocm/miopen:$miopen_tag
+if ! ($SU docker run -w $wd/repos -v $wd:$wd -it --name $DKR_NAME --hostname $DKR_NAME --privileged --device=/dev/kfd --device=/dev/dri rocm/miopen:$miopen_tag); then
+	$SU docker run -w $wd -v $wd:$wd -it --name $DKR_NAME --hostname $DKR_NAME --privileged --device=/dev/kfd --device=/dev/dri rocm/miopen:$miopen_tag
+fi
