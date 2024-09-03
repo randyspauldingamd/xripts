@@ -23,12 +23,15 @@ function curdir() {
 }
 
 function in_build() {
-  if [ "${PWD##*/}" == "build" ]; then return 0; fi
+  if [[ "${PWD##*/}" == *"build" ]]; then return 0; fi
   return 1
 }
 
 function has_build() {
-  if [ -d "build" ]; then return 0; fi
+  if [ $# -gt 0 ]; then
+    hbtag="d"
+  fi
+  if [ -d "${hbtag}build" ]; then return 0; fi
   return 1
 }
 
@@ -42,12 +45,33 @@ function mt() {
   if [ $test != test* ]; then
     test=test_$1
   fi
-  clear ; make -j 24 $test && bin/$test
+  clear ; make -j 96 $test && bin/$test
 }
 
 function mkb() {
-  mkdir -p build ; cd build
-  mv ./CMakeCache.txt ./oldCache.txt
+  if [ $# -gt 0 ]; then
+    mkbtag="d"
+  fi
+  mkbBUILD=${mkbtag}build
+  if (in_build $@); then
+    rm ./CMakeCache.txt 2> /dev/null
+  else
+    mkdir -p $mkbBUILD ; cd $mkbBUILD
+  fi
+}
+
+function newb() {
+  if [ $# -gt 0 ]; then
+    nbtag="d"
+  fi
+  nbBUILD=${nbtag}build
+  if in_build; then
+    cd ..
+  fi
+  if (has_build $@); then
+    rm -r $nbBUILD
+  fi
+  mkb $@
 }
 
 MIOPEN_TEST=MIOPEN_TEST_ALL
@@ -77,6 +101,7 @@ function fix_test() {
   return 0
 }
 
+# shorthand for <test> --gtest_filter
 function gtf() {
   if [ $# -lt 2 ]; then
     echo 'Usage: # gtf [bin/test_]mytest "suiteA*:suiteB*-fixtureC*"'
@@ -88,6 +113,7 @@ function gtf() {
   $TEST --gtest_filter="$2"
 }
 
+# shorthand for <test> --gtest_list_tests
 function gtlt() {
   if [ $# -lt 1 ]; then
     echo 'Usage: # gtlt [bin/test_]mytest'
