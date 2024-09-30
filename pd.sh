@@ -6,8 +6,13 @@ if (( $(ps aux | grep -c systemd) != 1 )); then
   return 1
 fi
 
-if [ $# == 0 ]; then
+if [ $# == 0 ] || [ "$1" == "puml" ]; then
   apt install -y bash-completion nano
+#  if [ "$1" == "puml" ]; then
+#    set -m
+#    # TODO: download plantuml
+#    apt install -y default-jre graphviz
+#  fi
 fi
 
 export USER=$( echo $PWD | awk -F/ '{print $3}' )
@@ -48,19 +53,19 @@ function mt() {
   clear ; make -j 96 $test && bin/$test
 }
 
-function mkb() {
+function mkb() {  # creates 
   if [ $# -gt 0 ]; then
     mkbtag="d"
   fi
   mkbBUILD=${mkbtag}build
-  if (in_build $@); then
+  if ( in_build $@ ); then
     rm ./CMakeCache.txt 2> /dev/null
   else
     mkdir -p $mkbBUILD ; cd $mkbBUILD
   fi
 }
 
-function newb() {
+function newb() {  # wipes out the current [d]build folder
   if [ $# -gt 0 ]; then
     nbtag="d"
   fi
@@ -68,7 +73,7 @@ function newb() {
   if in_build; then
     cd ..
   fi
-  if (has_build $@); then
+  if ( has_build $@ ); then
     rm -r $nbBUILD
   fi
   mkb $@
@@ -80,14 +85,14 @@ if [ "$HOSTNAME" = shemp ]; then
   MIOPEN_TEST=MIOPEN_TEST_GFX103X
   sudocmd=sudo
 fi
-function cmk() {
+function cmk() {  # runs CMake using default config
   export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" -DBUILD_DEV=1 $1 $2 $3 $4 $5 $6 ..
 }
-function dmk() {
+function dmk() {  # runs CMake using Debug config
   export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 -DCMAKE_BUILD_TYPE=Debug -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" -DBUILD_DEV=1 $1 $2 $3 $4 $5 $6 ..
 }
 
-function fix_test() {
+function fix_test() {  # helper for shorter test names
   if [ $# -lt 1 ]; then
     return 1
   fi
@@ -101,8 +106,7 @@ function fix_test() {
   return 0
 }
 
-# shorthand for <test> --gtest_filter
-function gtf() {
+function gtf() {  # shorthand for <test> --gtest_filter
   if [ $# -lt 2 ]; then
     echo 'Usage: # gtf [bin/test_]mytest "suiteA*:suiteB*-fixtureC*"'
     echo '   -->   bin/test_mytest --gtest_filter="suiteA*:suiteB*-fixtureC*"'
@@ -113,8 +117,7 @@ function gtf() {
   $TEST --gtest_filter="$2"
 }
 
-# shorthand for <test> --gtest_list_tests
-function gtlt() {
+function gtlt() {  # shorthand for <test> --gtest_list_tests
   if [ $# -lt 1 ]; then
     echo 'Usage: # gtlt [bin/test_]mytest'
     echo '   -->   bin/test_mytest --gtest_list_tests'

@@ -1,6 +1,6 @@
 #!/bin/bash
-# Runs a container from the given docker image. ci images only.
-# Stores the last image for later retrieval using the 'last' parameter
+# Runs a terminal in the given already-running container.
+# Stores the last container for later retrieval using the 'last' parameter
 
 script_dir=$(dirname $0)
 exist_cntnr=$script_dir/data/exist_miopen_cntnr
@@ -52,7 +52,7 @@ fi
 # get a random name ala https://devops.stackexchange.com/questions/9810/how-to-get-the-next-friendly-name-that-docker-will-assign-to-the-container-it-wi
 # DKR_NAME=$(curl -s https://frightanic.com/goodies_content/docker-names.php)
 
-# open the terminal is user's repo home
+# try to open the terminal in user's repo home
 if ! ($SU docker exec -w $wd/repos -it $miopen_tag /bin/bash); then
 	if ! ($SU docker exec -w $wd -it $miopen_tag /bin/bash); then
 		$SU docker exec -it $miopen_tag /bin/bash
