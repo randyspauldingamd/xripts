@@ -4,6 +4,7 @@
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]] ; then
   eval "$(ssh-agent -s)"
   ssh-add ~/.ssh/github_ecdsa
+#  ssh-add ~/.ssh/github.amd_ecdsa
 #  ssh-add ~/.ssh/id_ecdsa
 else
   echo 'Error: script must be sourced'

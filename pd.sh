@@ -6,6 +6,8 @@ if (( $(ps aux | grep -c systemd) != 1 )); then
   return 1
 fi
 
+export LOUD_ENV=MIOPEN_DEBUG_LOGGING_QUIETING_DISABLE=1  MIOPEN_ENABLE_LOGGING=1  MIOPEN_ENABLE_LOGGING_CMD=1  MIOPEN_LOG_LEVEL=6
+
 if [ $# == 0 ] || [ "$1" == "puml" ]; then
   apt install -y bash-completion nano
 #  if [ "$1" == "puml" ]; then
