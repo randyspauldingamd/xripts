@@ -1,5 +1,10 @@
 # Randy's ~/.bash_aliases file. Sourced by ~/.bashrc
 
+rjs=rspauldi
+if [ "$HOSTNAME" == "shemp" ]; then
+  rjs=randy
+fi
+
 alias edit='nano -l'
 alias Dg='docker image list | grep'
 alias Dil='docker image list | grep rocm/miopen | grep ci_'
@@ -7,11 +12,10 @@ alias Dil='docker image list | grep rocm/miopen | grep ci_'
 alias scr='screen -r'
 alias sco='screen -d -r'
 
-export PATH=/home/rspauldi/xripts:$PATH
+export Hm=/home/$rjs
+export Sc=$Hm/xripts
+export PATH=${Sc}:$PATH
 export DISPLAY=172.31.137.88:0
-
-export Hm=/home/rspauldi
-export Sc=$hm/xripts
 
 export fw11=rocm-framework-11
 export fw11ip=10.227.26.223
