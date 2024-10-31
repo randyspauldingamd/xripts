@@ -85,6 +85,7 @@ MIOPEN_TEST=MIOPEN_TEST_ALL
 sudocmd=
 if [ "$HOSTNAME" = shemp ]; then
   MIOPEN_TEST=MIOPEN_TEST_GFX103X
+  export HSA_OVERRIDE_GFX_VERSION=10.3.0
   sudocmd=sudo
 fi
 function cmk() {  # runs CMake using default config
