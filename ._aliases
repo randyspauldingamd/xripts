@@ -26,6 +26,16 @@ export s83ip=10.7.79.9
 export rack4=dell-rack-04
 export rack4ip=10.216.80.104
 
+export curlyip=192.168.0.100
+alias _curly='ssh randy@$curlyip'
+alias Curly='ssh randy@$curlyip'
+export xcurly=randy@${curlyip}:/home/randy/xfer
+
+export shempip=192.168.0.101
+alias _shemp='ssh randy@$shempip'
+alias Shemp='ssh randy@$shempip'
+export xshemp=randy@${shempip}:/home/randy/xfer
+
 export ghRJS=git@github.com:randyspauldingamd/MIOpen.git
 export ghMIOPEN=git@github.com:ROCm/MIOpen.git
 
