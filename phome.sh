@@ -7,11 +7,11 @@ if [ $# -eq 0 ]; then
   return 1
 fi
 
-files=(._aliases .gitconfig)
+files=(._aliases .bashrc .gitconfig)
 
 for file in ${files[@]}; do
   cp $file $file.bak
-  cp xripts/$file .
+  cp xripts/home/$file .
 done
 
 # TODO: finish fancier version. quick exit for now
