@@ -12,6 +12,9 @@ alias Dil='docker image list | grep rocm/miopen | grep ci_'
 alias scr='screen -r'
 alias sco='screen -d -r'
 
+alias du1='du -h -d 1'
+alias du2='du -h -d 2'
+
 export Hm=/home/$rjs
 export Sc=$Hm/xripts
 export PATH=${Sc}:$PATH

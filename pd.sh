@@ -6,10 +6,10 @@ if (( $(ps aux | grep -c systemd) != 1 )); then
   return 1
 fi
 
-export LOUD_ENV=MIOPEN_DEBUG_LOGGING_QUIETING_DISABLE=1  MIOPEN_ENABLE_LOGGING=1  MIOPEN_ENABLE_LOGGING_CMD=1  MIOPEN_LOG_LEVEL=6
+# export LOUD_ENV=MIOPEN_DEBUG_LOGGING_QUIETING_DISABLE=1  MIOPEN_ENABLE_LOGGING=1  MIOPEN_ENABLE_LOGGING_CMD=1  MIOPEN_LOG_LEVEL=6
 
 if [ $# == 0 ] || [ "$1" == "puml" ]; then
-  apt install -y bash-completion nano
+  apt install -y bash-completion nano dotnet-runtime-8.0
 #  if [ "$1" == "puml" ]; then
 #    set -m
 #    # TODO: download plantuml
@@ -89,6 +89,15 @@ if [ "$HOSTNAME" = shemp ]; then
   sudocmd=sudo
 fi
 function cmk() {  # runs CMake using default config
+  if [ "$1" == "-h" ]; then
+    echo "[TEST_TYPE=(ALL|HALF|INT8|FLOAT8|BFLOAT16|FLOAT)] [cd]mk $1 $2 $3 $4 $5 $6"
+    return 0
+  fi
+  MIOPEN_TEST=MIOPEN_TEST_ALL
+#  MIOPEN_TEST_FLOAT8=
+  if [ "$TEST_TYPE" != "" ]; then
+    MIOPEN_TEST=MIOPEN_TEST_${TEST_TYPE}
+  fi
   export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" -DBUILD_DEV=1 $1 $2 $3 $4 $5 $6 ..
 }
 function dmk() {  # runs CMake using Debug config

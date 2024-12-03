@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -eq 0 ]; then
-  echo "phome should be run from your home directory. Enter 'phome go' to execute it from here."
+  echo "phome should be run from your home directory (not sourced). Enter '$ phome go' to execute it from here."
   [ "$BASH_SOURCE" == "$0" ] &&
     exit 1
   return 1
