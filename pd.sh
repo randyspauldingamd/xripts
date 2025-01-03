@@ -90,16 +90,25 @@ if [ "$HOSTNAME" = shemp ]; then
 fi
 function cmk() {  # runs CMake using default config
   if [ "$1" == "-h" ]; then
-    echo "[TEST_TYPE=(ALL|HALF|INT8|FLOAT8|BFLOAT16|FLOAT)] [cd]mk $1 $2 $3 $4 $5 $6"
+    echo "[TEST_TYPE=ALL|HALF|INT8|FLOAT8|BFLOAT16|FLOAT] [GFX=908|90A|94X|95X|900|906|103X|110X|120X] [CI=ON] <c|d>mk arg1 arg2 arg3 arg4 arg5 arg6"
     return 0
   fi
   MIOPEN_TEST=MIOPEN_TEST_ALL
 #  MIOPEN_TEST_FLOAT8=
   if [ "$TEST_TYPE" != "" ]; then
-    MIOPEN_TEST=MIOPEN_TEST_${TEST_TYPE}
+    MIOPEN_TEST="MIOPEN_TEST_${TEST_TYPE}"
   fi
-  export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" -DBUILD_DEV=1 $1 $2 $3 $4 $5 $6 ..
+  DMIOPEN_TEXT_GFX=
+  if [ "$GFX" != "" ]; then
+    DMIOPEN_TEST_GFX="-DMIOPEN_TEST_GFX${GFX}=1"
+  fi
+  MIOPEN_CI=
+  if [ "$CI" != "" ]; then
+    MIOPEN_CI=-DMIOPEN_TEST_FLAGS=" --disable-verification-cache"  -DMIOPEN_USE_COMPOSABLEKERNEL=On  -DMIOPEN_USE_MLIR=ON -DMIOPEN_GPU_SYNC=Off
+  fi
+  export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 $DMIOPEN_TEXT_GFX $MIOPEN_CI -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" -DBUILD_DEV=1 $1 $2 $3 $4 $5 $6 ..
 }
+
 function dmk() {  # runs CMake using Debug config
   export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 -DCMAKE_BUILD_TYPE=Debug -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" -DBUILD_DEV=1 $1 $2 $3 $4 $5 $6 ..
 }
@@ -110,8 +119,10 @@ function fix_test() {  # helper for shorter test names
   fi
 
   TEST=$1
-  if [[ ${TEST} != *"bin/test_"* ]]; then
-    TEST="bin/test_"$TEST
+  if [[ ${TEST} == "test_"* ]]; then
+    TEST="bin/"${TEST}
+  elif [[ ${TEST} != *"bin/test_"* ]]; then
+    TEST="bin/test_"${TEST}
   fi
 
   echo $TEST

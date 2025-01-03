@@ -26,6 +26,12 @@ export fw11ip=10.227.26.223
 export s83=banff-cyxtera-s83-2
 export s83ip=10.7.79.9
 
+export s73=banff-cyxtera-73-2
+export s73ip=10.7.79.11
+
+export s70=banff-cyxtera-s70-4
+export s70ip=10.7.78.244
+
 export rack4=dell-rack-04
 export rack4ip=10.216.80.104
 
