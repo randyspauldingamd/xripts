@@ -14,6 +14,8 @@ alias sco='screen -d -r'
 
 alias du1='du -h -d 1'
 alias du2='du -h -d 2'
+alias du1s='du -h -d 1 | sort -h'
+alias du2s='du -h -d 2 | sort -h'
 
 export Hm=/home/$rjs
 export Sc=$Hm/xripts
