@@ -8,6 +8,7 @@
 	bv = branch -v --sort=committerdate
 	cm = commit -m
 	co = checkout
+	ct = checkout --track
 	dl = diff HEAD@{1} --
 	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
 	ld = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph
