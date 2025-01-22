@@ -1,0 +1,1 @@
+. loud.sh 6 ; MIOPEN_FIND_ENFORCE=4  MIOPEN_FIND_MODE=1 MIOPEN_DEBUG_FIND_ONLY_SOLVER=108 ./bin/MIOpenDriver conv -n 100 -c 3 -H 32 -W 32 -k 32 -y 3 -x 3 -p 0 -q 0 -u 1 -v 1 -l 1 -j 1 -m conv -g 1 -F 2 -t 1 2> ../../bwd.txt
