@@ -22,8 +22,13 @@
 	osr = remote set-url origin git@github.com:randyspauldingamd/MIOpen.git
 	ourl = config --get remote.origin.url
 	ph = push -u origin HEAD
+	pa = push -u amd
+	pm = push -u mio
+	pr = push -u rjs
 	pu = push -u origin
-	rf = checkout HEAD --
-	rh = reset --hard
+	raa = remote add amd git@github.amd.com:ROCm/MIOpen.git
+	ram = remote add mio git@github.com:ROCm/MIOpen.git
+	rar = remote add rjs git@github.com:randyspauldingamd/MIOpen.git
+	Rf = checkout HEAD --
+	Rh = reset --hard
 	st = status --short --branch
-	up = remote add upstream 
