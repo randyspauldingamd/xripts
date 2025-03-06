@@ -18,11 +18,13 @@ fi
 
 # TODO: error checking!
 . ssha
-# TODO: remember current branch
+CURRENT_BRANCH=$(git branch --show-current)
+# TODO: add option, merge main into current branch instead of this
 git co main
 git pull
 # TODO: count levels to home
-pwd
-exit 0
 cd ..
 phome.sh go
+cd ${SCRIPT_DIR}
+git co ${CURRENT_BRANCH}
+
