@@ -16,12 +16,13 @@ if (( $(git st | wc -l) > 1 )); then
   exit 1
 fi
 
-exit 0
 # TODO: error checking!
 . ssha
 # TODO: remember current branch
 git co main
 git pull
 # TODO: count levels to home
+pwd
+exit 0
 cd ..
 phome.sh go
