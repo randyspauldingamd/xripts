@@ -9,9 +9,11 @@ fi
 while test $# -gt 0
 do
     case "$1" in
-        stash) STASH=YES
+        stash)
+            STASH=YES
             ;;
-        merge) MERGE=YES
+        merge)
+            MERGE=YES
             ;;
 #        --*) echo "bad option $1"
 #            ;;
@@ -26,7 +28,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd ${SCRIPT_DIR}
 
 CURRENT_BRANCH=$(git branch --show-current)
-if [ "${STASH}"=="YES" ]; then
+if [ "$STASH" == "YES" ]; then
   git stash
 elif (( $(git st | wc -l) > 1 )); then
   # TODO: add flags to prompt to discard changes or discard automatically
@@ -45,7 +47,8 @@ cd ..
 phome.sh go
 cd ${SCRIPT_DIR}
 git co ${CURRENT_BRANCH}
-if [ "${STASH}"=="YES" ]; then
-  echo "popping..."
+if [ "$STASH" == "YES" ]; then
+# TODO: check that we stashed something
+  echo "popping stash..."
   git stash pop
 fi
