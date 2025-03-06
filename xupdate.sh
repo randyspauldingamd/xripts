@@ -20,6 +20,7 @@ fi
 . ssha
 CURRENT_BRANCH=$(git branch --show-current)
 # TODO: add option, merge main into current branch instead of this
+git stash
 git co main
 git pull
 # TODO: count levels to home
@@ -27,4 +28,4 @@ cd ..
 phome.sh go
 cd ${SCRIPT_DIR}
 git co ${CURRENT_BRANCH}
-
+git pop
