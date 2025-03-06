@@ -46,5 +46,6 @@ phome.sh go
 cd ${SCRIPT_DIR}
 git co ${CURRENT_BRANCH}
 if [ "${STASH}"=="YES" ]; then
-  git pop
+  echo "popping..."
+  git stash pop
 fi
