@@ -1,0 +1,6 @@
+#/bin/bash
+
+. ssha
+git aa
+git cm "chkpt"
+git push

@@ -2,10 +2,15 @@
 # Runs a new ssh-agent and loads the user's key for github
 
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]] ; then
-  eval "$(ssh-agent -s)"
-  ssh-add ~/.ssh/github_ecdsa
+  if (( $(echo $SSH_AGENT_PID | wc -w) > 0 )); then
+    echo 'SSH agent already running!'
+    # TODO: add option to run it anyway
+  else
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/github_ecdsa
+  fi
 #  ssh-add ~/.ssh/github.amd_ecdsa
 #  ssh-add ~/.ssh/id_ecdsa
 else
-  echo 'Error: script must be sourced'
+  echo 'Error: ssha script must be sourced'
 fi

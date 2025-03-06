@@ -6,6 +6,7 @@
 [alias]
 	aa = add --all
 	bv = branch -v --sort=committerdate
+	chkpt = !git aa && git cm "chkpt" && git push && :
 	cm = commit -m
 	co = checkout
 	ct = checkout --track
@@ -18,7 +19,7 @@
 	ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
 	nb = checkout -b
 	oset = remote set-url origin
-	osa	= remote set-url origin git@github.amd.com:ROCm/MIOpen.git
+	osa = remote set-url origin git@github.amd.com:ROCm/MIOpen.git
 	osm = remote set-url origin git@github.com:ROCm/MIOpen.git
 	osr = remote set-url origin git@github.com:randyspauldingamd/MIOpen.git
 	ourl = config --get remote.origin.url
