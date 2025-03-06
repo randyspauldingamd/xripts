@@ -12,9 +12,11 @@ cd ${SCRIPT_DIR}
 if (( $(git st | wc -l) > 1 )); then
   # TODO: add flags to prompt to discard changes or discard automatically
   echo "You have uncommitted changes; aborting"
+  git st
   exit 1
 fi
 
+exit 0
 # TODO: error checking!
 . ssha
 # TODO: remember current branch
