@@ -13,14 +13,21 @@ alias ll='ls -alF'
 
 # export LOUD_ENV=MIOPEN_DEBUG_LOGGING_QUIETING_DISABLE=1  MIOPEN_ENABLE_LOGGING=1  MIOPEN_ENABLE_LOGGING_CMD=1  MIOPEN_LOG_LEVEL=6
 
-if [ $# == 0 ] || [ "$1" == "puml" ]; then
-  apt install -y bash-completion nano dotnet-runtime-8.0
+if [ $# == 0 ] || [ "$1" == "puml" ] || [ "$1" == "tf" ]; then
+  PKGS=bash-completion nano dotnet-runtime-8.0
+  if [ "$1" == "tf" ]; then
+    apt update
+	PKGS=${PKGS} cmake clang-format-12
+  fi
 #  if [ "$1" == "puml" ]; then
 #    set -m
 #    # TODO: download plantuml
-#    apt install -y default-jre graphviz
+#    PKGS=${PKGS} default-jre graphviz
 #  fi
+  apt install -y ${PKGS}
 fi
+
+# TODO: edit requirements.txt, then run cmake -P install_deps.cmake --minimum --prefix ./install_dir
 
 export USER=$( echo $PWD | awk -F/ '{print $3}' )
 export PATH=/home/$USER/xripts:$PATH
