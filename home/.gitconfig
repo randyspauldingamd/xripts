@@ -5,6 +5,7 @@
     editor = nano
 [alias]
 	aa = add --all
+	au = update-index --assume-unchanged
 	bv = branch -v --sort=committerdate
 	chkpt = !git aa && git cm "chkpt" && git push && :
 	cm = commit -m
@@ -17,6 +18,7 @@
 	l8 = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph -n 8
 	l5 = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --graph -n 5
 	ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+	nau = update-index --no-assume-unchanged
 	nb = checkout -b
 	oset = remote set-url origin
 	osa = remote set-url origin git@github.amd.com:ROCm/MIOpen.git
@@ -33,4 +35,6 @@
 	rar = remote add rjs git@github.com:randyspauldingamd/MIOpen.git
 	Rf = checkout HEAD --
 	Rh = reset --hard
+	sau = !git ls-files -v | grep "^[[:lower:]]"
 	st = status --short --branch
+	us = restore --staged
