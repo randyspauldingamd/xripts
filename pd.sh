@@ -6,6 +6,11 @@ if (( $(ps aux | grep -c systemd) != 1 )); then
   return 1
 fi
 
+# tf dockers don't define these
+alias l='ls -CF'
+alias la='ls -A'
+alias ll='ls -alF'
+
 # export LOUD_ENV=MIOPEN_DEBUG_LOGGING_QUIETING_DISABLE=1  MIOPEN_ENABLE_LOGGING=1  MIOPEN_ENABLE_LOGGING_CMD=1  MIOPEN_LOG_LEVEL=6
 
 if [ $# == 0 ] || [ "$1" == "puml" ]; then
@@ -18,7 +23,7 @@ if [ $# == 0 ] || [ "$1" == "puml" ]; then
 fi
 
 export USER=$( echo $PWD | awk -F/ '{print $3}' )
-export PATH=/home/$USER/xripts:/home/$USER/scripts:$PATH
+export PATH=/home/$USER/xripts:$PATH
 
 . /etc/bash_completion
 alias edit='nano -l'
@@ -55,7 +60,7 @@ function mt() {
   clear ; make -j 96 $test && bin/$test
 }
 
-function mkb() {  # creates 
+function mkb() {  # creates the [d]build dir
   if [ $# -gt 0 ]; then
     mkbtag="d"
   fi
