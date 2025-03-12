@@ -7,6 +7,8 @@ if [ $# -eq 0 ]; then
   return 1
 fi
 
+mkdir repos 2> /dev/null
+
 homefiles=(._aliases .bashrc .gitconfig)
 
 for file in ${homefiles[@]}; do
