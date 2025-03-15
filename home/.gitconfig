@@ -36,5 +36,5 @@
 	Rf = checkout HEAD --
 	Rh = reset --hard
 	sau = !git ls-files -v | grep "^[[:lower:]]"
-	st = status --short --branch
+	st = !git config --get remote.origin.url && git status --short --branch
 	us = restore --staged
