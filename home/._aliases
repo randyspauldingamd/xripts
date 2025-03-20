@@ -54,3 +54,12 @@ export ghMIOPEN=git@github.com:ROCm/MIOpen.git
 # eval "$(ssh-agent -s)"
 # ssh-add ~/.ssh/github_ecdsa
 
+function tofw11() {
+  if [ $# -eq 0 ]; then
+    echo "Usage: tofw11 <path to>/<file>"
+    return
+  fi
+
+  base_name=$(basename $1)
+  scp $1 rspauldi@10.227.26.223:~/xfer/${base_name}
+}
