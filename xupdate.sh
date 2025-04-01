@@ -30,7 +30,7 @@ cd ${SCRIPT_DIR}
 CURRENT_BRANCH=$(git branch --show-current)
 if [ "$STASH" == "YES" ]; then
   git stash
-elif (( $(git status | wc -l) > 1 )); then
+elif (( $(/usr/bin/git status | wc -l) > 1 )); then
   # TODO: add flags to prompt to discard changes or discard automatically
   echo "You have uncommitted changes; aborting"
   git st
