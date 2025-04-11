@@ -286,6 +286,24 @@ function brestore() {
 
 mig ()
 {
+# TODO find the binary
+  if [ $# -lt 1 ]; then
+    echo 'Usage: # mig <filter>'
+    echo '   -->   bin/miopen_gtest --gtest_filter=<filter>'
+    return 1
+  fi
+
   bin/miopen_gtest --gtest_filter=$1
 }
 
+deps ()
+{
+# TODO find user root folder
+  if [ $# -lt 1 ]; then
+    echo 'Usage: # deps <path>'
+    echo '   -->   cmake -P install_deps.cmake --minimum --prefix ../../deps/<path>'
+    return 1
+  fi
+
+  cmake -P install_deps.cmake --minimum --prefix ../../deps/$1
+}
