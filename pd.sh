@@ -118,7 +118,7 @@ fi
 
 # BUILD_DEV=OFF is much faster. This is the default for these scripts.
 function cmk() {  # runs CMake using default config
-  if [ "$1" == "-h" || "$1" == "--help" ]; then
+  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     echo "[TEST_TYPE=<arg>] [GFX=908|90A|94X|95X|900|906|103X|110X|120X]  [DEPS=<path>] [CI=ON] [DEV=ON] [ONE=ON]  cmk arg1 arg2 arg3 arg4 arg5 arg6"
     echo "  CI=<anything> adds the flags that our CI uses.                default: <not specified>"
     echo "  DEV=ON is much slower.                                        default: DEV=OFF"
@@ -130,23 +130,23 @@ function cmk() {  # runs CMake using default config
   fi
   MIOPEN_TEST=MIOPEN_TEST_ALL
 #  MIOPEN_TEST_FLOAT8=
-  if [ "$TEST_TYPE" != "" ]; then
+  if [[ "$TEST_TYPE" != "" ]]; then
     MIOPEN_TEST="MIOPEN_TEST_${TEST_TYPE}"
   fi
   DMIOPEN_TEXT_GFX=
-  if [ "$GFX" != "" ]; then
+  if [[ "$GFX" != "" ]]; then
     DMIOPEN_TEST_GFX="-DMIOPEN_TEST_GFX${GFX}=1"
   fi
   MIOPEN_CI=
-  if [ "$CI" != "" ]; then
+  if [[ "$CI" != "" ]]; then
     MIOPEN_CI=-DMIOPEN_TEST_FLAGS=" --disable-verification-cache"  -DMIOPEN_USE_COMPOSABLEKERNEL=On  -DMIOPEN_USE_MLIR=ON -DMIOPEN_GPU_SYNC=Off
   fi
   BUILD_DEV=OFF
-  if [ "$DEV" != "" ]; then
+  if [[ "$DEV" != "" ]]; then
     BUILD_DEV=$DEV
   fi
   TEST_DISCRETE=ON
-  if [ "$ONE" == "ON" || "$ONE" == "on" ]; then
+  if [[ "$ONE" == "ON" || "$ONE" == "on" ]]; then
     TEST_DISCRETE=OFF
   fi
 
@@ -155,7 +155,7 @@ function cmk() {  # runs CMake using default config
 
 # BUILD_DEV=OFF is much faster. This is the default for these scripts.
 function qmk() {  # runs CMake using CQE config (CI=ON, ONE=ON)
-  if [ "$1" == "-h" || "$1" == "--help" ]; then
+  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     echo "[TEST_TYPE=ALL|HALF|INT8|FLOAT8|BFLOAT16|FLOAT]  [GFX=908|90A|94X|95X|900|906|103X|110X|120X]  [CI=OFF] [DEV=ON] [ONE=OFF]  qmk  arg1 arg2 arg3 arg4 arg5 arg6"
     echo "  CI=ON adds the flags that our CI uses.                        default: CI=ON)"
     echo "  DEV=ON is much slower.                                        default: DEV=OFF"
@@ -164,23 +164,23 @@ function qmk() {  # runs CMake using CQE config (CI=ON, ONE=ON)
   fi
   MIOPEN_TEST=MIOPEN_TEST_ALL
 #  MIOPEN_TEST_FLOAT8=
-  if [ "$TEST_TYPE" != "" ]; then
+  if [[ "$TEST_TYPE" != "" ]]; then
     MIOPEN_TEST="MIOPEN_TEST_${TEST_TYPE}"
   fi
   DMIOPEN_TEXT_GFX=
-  if [ "$GFX" != "" ]; then
+  if [[ "$GFX" != "" ]]; then
     DMIOPEN_TEST_GFX="-DMIOPEN_TEST_GFX${GFX}=1"
   fi
   MIOPEN_CI=ON
-  if [ "$CI" != "" ]; then
+  if [[ "$CI" != "" ]]; then
     MIOPEN_CI=-DMIOPEN_TEST_FLAGS=" --disable-verification-cache"  -DMIOPEN_USE_COMPOSABLEKERNEL=On  -DMIOPEN_USE_MLIR=ON -DMIOPEN_GPU_SYNC=Off
   fi
   BUILD_DEV=OFF
-  if [ "$DEV" != "" ]; then
+  if [[ "$DEV" != "" ]]; then
     BUILD_DEV=$DEV
   fi
   TEST_DISCRETE=OFF
-  if [ "$ONE" == "OFF" || "$ONE" == "off" ]; then
+  if [[ "$ONE" == "OFF" || "$ONE" == "off" ]]; then
     TEST_DISCRETE=ON
   fi
 
