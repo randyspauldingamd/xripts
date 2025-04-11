@@ -72,9 +72,12 @@ function mt() {
   clear ; make -j 96 $test && bin/$test
 }
 
-function mkb() {  # creates the [d]build dir
+function mkb() {  # creates the [d|q]build dir
   if [ $# -gt 0 ]; then
-    mkbtag="d"
+    mkbtag="q"
+    if [ "$1" == "d" ]; then
+      mkbtag="d"
+    fi
   fi
   mkbBUILD=${mkbtag}build
   if ( in_build $@ ); then
@@ -84,9 +87,12 @@ function mkb() {  # creates the [d]build dir
   fi
 }
 
-function newb() {  # wipes out the current [d]build folder
+function newb() {  # wipes out the current [d|q]build folder
   if [ $# -gt 0 ]; then
-    nbtag="d"
+    mkbtag="q"
+    if [ "$1" == "d" ]; then
+      mkbtag="d"
+    fi
   fi
   nbBUILD=${nbtag}build
   if in_build; then
@@ -98,6 +104,8 @@ function newb() {  # wipes out the current [d]build folder
   mkb $@
 }
 
+
+
 MIOPEN_TEST=MIOPEN_TEST_ALL
 sudocmd=
 if [ "$HOSTNAME" = shemp ]; then
@@ -106,9 +114,18 @@ if [ "$HOSTNAME" = shemp ]; then
   sudocmd=sudo
 fi
 
+
+
+# BUILD_DEV=OFF is much faster. This is the default for these scripts.
 function cmk() {  # runs CMake using default config
-  if [ "$1" == "-h" ]; then
-    echo "[TEST_TYPE=ALL|HALF|INT8|FLOAT8|BFLOAT16|FLOAT] [GFX=908|90A|94X|95X|900|906|103X|110X|120X] [CI=ON] [DEV=ON] <c|d>mk arg1 arg2 arg3 arg4 arg5 arg6"
+  if [ "$1" == "-h" || "$1" == "--help" ]; then
+    echo "[TEST_TYPE=<arg>] [GFX=908|90A|94X|95X|900|906|103X|110X|120X]  [DEPS=<path>] [CI=ON] [DEV=ON] [ONE=ON]  cmk arg1 arg2 arg3 arg4 arg5 arg6"
+    echo "  CI=<anything> adds the flags that our CI uses.                default: <not specified>"
+    echo "  DEV=ON is much slower.                                        default: DEV=OFF"
+    echo "  ONE=ON builds miopen_gtest instead of the discrete tests.     default: ONE=OFF"
+    echo "  DEPS=<path> searches for deps/path that contains manually-built dependencies"
+    echo "  TEST_TYPE=ALL|HALF|INT8|FLOAT8|BFLOAT16|FLOAT"
+    echo "  GFX=908|90A|94X|95X|900|906|103X|110X|120X"
     return 0
   fi
   MIOPEN_TEST=MIOPEN_TEST_ALL
@@ -128,12 +145,53 @@ function cmk() {  # runs CMake using default config
   if [ "$DEV" != "" ]; then
     BUILD_DEV=$DEV
   fi
+  TEST_DISCRETE=ON
+  if [ "$ONE" == "ON" || "$ONE" == "on" ]; then
+    TEST_DISCRETE=OFF
+  fi
+
   export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 $DMIOPEN_TEXT_GFX $MIOPEN_CI -DMIOPEN_BACKEND=HIP -DBUILD_DEV=$BUILD_DEV -DCMAKE_PREFIX_PATH="/opt/rocm/" $1 $2 $3 $4 $5 $6 ..
+}
+
+# BUILD_DEV=OFF is much faster. This is the default for these scripts.
+function qmk() {  # runs CMake using CQE config (CI=ON, ONE=ON)
+  if [ "$1" == "-h" || "$1" == "--help" ]; then
+    echo "[TEST_TYPE=ALL|HALF|INT8|FLOAT8|BFLOAT16|FLOAT]  [GFX=908|90A|94X|95X|900|906|103X|110X|120X]  [CI=OFF] [DEV=ON] [ONE=OFF]  qmk  arg1 arg2 arg3 arg4 arg5 arg6"
+    echo "  CI=ON adds the flags that our CI uses.                        default: CI=ON)"
+    echo "  DEV=ON is much slower.                                        default: DEV=OFF"
+    echo "  ONE=ON builds miopen_gtest instead of the discrete tests.     default: ONE=ON"
+    return 0
+  fi
+  MIOPEN_TEST=MIOPEN_TEST_ALL
+#  MIOPEN_TEST_FLOAT8=
+  if [ "$TEST_TYPE" != "" ]; then
+    MIOPEN_TEST="MIOPEN_TEST_${TEST_TYPE}"
+  fi
+  DMIOPEN_TEXT_GFX=
+  if [ "$GFX" != "" ]; then
+    DMIOPEN_TEST_GFX="-DMIOPEN_TEST_GFX${GFX}=1"
+  fi
+  MIOPEN_CI=ON
+  if [ "$CI" != "" ]; then
+    MIOPEN_CI=-DMIOPEN_TEST_FLAGS=" --disable-verification-cache"  -DMIOPEN_USE_COMPOSABLEKERNEL=On  -DMIOPEN_USE_MLIR=ON -DMIOPEN_GPU_SYNC=Off
+  fi
+  BUILD_DEV=OFF
+  if [ "$DEV" != "" ]; then
+    BUILD_DEV=$DEV
+  fi
+  TEST_DISCRETE=OFF
+  if [ "$ONE" == "OFF" || "$ONE" == "off" ]; then
+    TEST_DISCRETE=ON
+  fi
+
+  export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 $DMIOPEN_TEXT_GFX $MIOPEN_CI -DMIOPEN_BACKEND=HIP -DBUILD_DEV=$BUILD_DEV -DCMAKE_PREFIX_PATH="/opt/rocm/" -DMIOPEN_TEST_DISCRETE=$TEST_DISCRETE $1 $2 $3 $4 $5 $6 ..
 }
 
 function dmk() {  # runs CMake using Debug config
   export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 -DCMAKE_BUILD_TYPE=Debug -DMIOPEN_BACKEND=HIP -DCMAKE_PREFIX_PATH="/opt/rocm/" -DBUILD_DEV=1 $1 $2 $3 $4 $5 $6 ..
 }
+
+
 
 function fix_test() {  # helper for shorter test names
   if [ $# -lt 1 ]; then
@@ -182,6 +240,7 @@ function get_miotag() {
 }
 
 function bstash() {
+  return 0   # disabled
   if in_build; then cd ..; fi
   if ! has_build; then
     echo "Unable to find build directory, aborting"
@@ -199,6 +258,7 @@ function bstash() {
 }
 
 function brestore() {
+  return 0   # disabled
   if in_build; then
     echo "Aborting--already in build folder"
     return 1
