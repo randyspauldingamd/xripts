@@ -1,5 +1,6 @@
 #!/bin/bash
 # Extends a 'standard' MIOpen ci docker container.
+# For simpler containers such as TF or rocm-npi, use 'cmake -P install_deps.cmake --minimum --prefix ../../deps/<path>'
 
 if (( $(ps aux | grep -c systemd) != 1 )); then
   echo "This script should only be run from a docker container."
@@ -39,6 +40,7 @@ export PATH=/home/$USER/xripts:$PATH
 
 . /etc/bash_completion
 alias edit='nano -l'
+alias cor='ctest --output-on-failure -R'
 
 alias tgts='cmake --build . --target help | grep -v -e "\btest_" -e "\btidy" -e "\bgenerate" | sed "s/\.\.\. //" '
 
@@ -281,3 +283,9 @@ function brestore() {
   fi
   mv $tmpdir .
 }
+
+mig ()
+{
+  bin/miopen_gtest --gtest_filter=$1
+}
+
