@@ -31,3 +31,5 @@ if [ -f ${${home_file}} ]; then
   echo "Please create data/home_path: 'echo </home/randy> > <scripts_dir>/data/home_path"
   return 1
 fi
+
+[ -f ssh.tar ] && rm ssh.tar 2>&1 > /dev/null
