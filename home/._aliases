@@ -6,8 +6,11 @@ if [ "$HOSTNAME" == "shemp" ]; then
 fi
 
 alias edit='nano -l'
+alias Dc='docker ps -a'
 alias Dg='docker image list | grep'
-alias Dil='docker image list | grep rocm/miopen | grep ci_'
+alias Di='docker image list'
+alias Dim='docker image list | grep rocm/miopen | grep ci_'
+alias Dp='docker pull'
 
 alias cpus='echo TotlCpus:        $(grep --count "processor.*:" /proc/cpuinfo)'
 alias mem='grep "MemTotal:"  /proc/meminfo'
