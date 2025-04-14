@@ -9,6 +9,11 @@ alias edit='nano -l'
 alias Dg='docker image list | grep'
 alias Dil='docker image list | grep rocm/miopen | grep ci_'
 
+alias cpus='echo TotlCpus:        $(grep --count "processor.*:" /proc/cpuinfo)'
+alias mem='grep "MemTotal:"  /proc/meminfo'
+alias gpus='rocminfo | grep "^  Name:"'
+alias sysinfo='cpus ; mem ; gpus'
+
 alias scr='screen -r'
 alias sco='screen -d -r'
 
