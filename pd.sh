@@ -121,7 +121,7 @@ fi
 # BUILD_DEV=OFF is much faster. This is the default for these scripts.
 function cmk() {  # runs CMake using default config
   if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    echo "[TEST_TYPE=<arg>] [GFX=908|90A|94X|95X|900|906|103X|110X|120X]  [DEPS=<path>] [CI=ON] [DEV=ON] [ONE=ON]  cmk arg1 arg2 arg3 arg4 arg5 arg6"
+    echo "[TEST_TYPE=<arg>] [GFX=<arg>] [DEPS=<path>] [CI=ON] [DEV=ON] [ONE=ON]  cmk arg1 arg2 arg3 arg4 arg5 arg6"
     echo "  CI=<anything> adds the flags that our CI uses.                default: <not specified>"
     echo "  DEV=ON is much slower.                                        default: DEV=OFF"
     echo "  ONE=ON builds miopen_gtest instead of the discrete tests.     default: ONE=OFF"
@@ -151,17 +151,25 @@ function cmk() {  # runs CMake using default config
   if [[ "$ONE" == "ON" || "$ONE" == "on" ]]; then
     TEST_DISCRETE=OFF
   fi
+  if [[ "$DEPS" == "" ]]; then
+    DEPS="/opt/rocm"
+  else
+    DEPS="../../../deps/$DEPS"
+  fi
 
-  export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 $DMIOPEN_TEXT_GFX $MIOPEN_CI -DMIOPEN_BACKEND=HIP -DBUILD_DEV=$BUILD_DEV -DCMAKE_PREFIX_PATH="/opt/rocm/" $1 $2 $3 $4 $5 $6 ..
+  export CXX=/opt/rocm/llvm/bin/clang++ && CMAKE_PREFIX_PATH=$DEPS $sudocmd cmake -D$MIOPEN_TEST=1 $DMIOPEN_TEXT_GFX $MIOPEN_CI -DMIOPEN_BACKEND=HIP -DBUILD_DEV=$BUILD_DEV -DMIOPEN_TEST_DISCRETE=$TEST_DISCRETE $1 $2 $3 $4 $5 $6 ..
 }
 
 # BUILD_DEV=OFF is much faster. This is the default for these scripts.
 function qmk() {  # runs CMake using CQE config (CI=ON, ONE=ON)
   if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    echo "[TEST_TYPE=ALL|HALF|INT8|FLOAT8|BFLOAT16|FLOAT]  [GFX=908|90A|94X|95X|900|906|103X|110X|120X]  [CI=OFF] [DEV=ON] [ONE=OFF]  qmk  arg1 arg2 arg3 arg4 arg5 arg6"
+    echo "[TEST_TYPE=<arg>] [GFX=<arg>] [DEPS=<path>] [CI=OFF] [DEV=ON] [ONE=OFF]  cmk arg1 arg2 arg3 arg4 arg5 arg6"
     echo "  CI=ON adds the flags that our CI uses.                        default: CI=ON)"
     echo "  DEV=ON is much slower.                                        default: DEV=OFF"
     echo "  ONE=ON builds miopen_gtest instead of the discrete tests.     default: ONE=ON"
+    echo "  DEPS=<path> searches for deps/path that contains manually-built dependencies"
+    echo "  TEST_TYPE=ALL|HALF|INT8|FLOAT8|BFLOAT16|FLOAT"
+    echo "  GFX=908|90A|94X|95X|900|906|103X|110X|120X"
     return 0
   fi
   MIOPEN_TEST=MIOPEN_TEST_ALL
@@ -185,8 +193,13 @@ function qmk() {  # runs CMake using CQE config (CI=ON, ONE=ON)
   if [[ "$ONE" == "OFF" || "$ONE" == "off" ]]; then
     TEST_DISCRETE=ON
   fi
+  if [[ "$DEPS" == "" ]]; then
+    DEPS="/opt/rocm"
+  else
+    DEPS="../../../deps/$DEPS"
+  fi
 
-  export CXX=/opt/rocm/llvm/bin/clang++ && $sudocmd cmake -D$MIOPEN_TEST=1 $DMIOPEN_TEXT_GFX $MIOPEN_CI -DMIOPEN_BACKEND=HIP -DBUILD_DEV=$BUILD_DEV -DCMAKE_PREFIX_PATH="/opt/rocm/" -DMIOPEN_TEST_DISCRETE=$TEST_DISCRETE $1 $2 $3 $4 $5 $6 ..
+  export CXX=/opt/rocm/llvm/bin/clang++ && CMAKE_PREFIX_PATH=$DEPS $sudocmd cmake -D$MIOPEN_TEST=1 $DMIOPEN_TEXT_GFX $MIOPEN_CI -DMIOPEN_BACKEND=HIP -DBUILD_DEV=$BUILD_DEV -DMIOPEN_TEST_DISCRETE=$TEST_DISCRETE $1 $2 $3 $4 $5 $6 ..
 }
 
 function dmk() {  # runs CMake using Debug config
