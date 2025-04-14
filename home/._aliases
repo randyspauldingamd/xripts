@@ -50,6 +50,11 @@ export xshemp=randy@${shempip}:/home/randy/xfer
 export ghRJS=git@github.com:randyspauldingamd/MIOpen.git
 export ghMIOPEN=git@github.com:ROCm/MIOpen.git
 
+alias gca='mkdir _amd && cd _amd && git clone git@github.amd.com:ROCm/MIOpen.git           && mv MIOpen ../a-MIOpen && cd ../a-MIOpen && rmdir ../_amd'
+alias gce='mkdir _emu && cd _emu && git clone git@github.com:AMD-ROCm-Internal/MIOpen.git  && mv MIOpen ../e-MIOpen && cd ../e-MIOpen && rmdir ../_emu'
+alias gcm='mkdir _pub && cd _pub && git clone git@github.com:ROCm/MIOpen.git               && mv MIOpen ../p-MIOpen && cd ../p-MIOpen && rmdir ../_pub'
+alias gcr='mkdir _rjs && cd _rjs && git clone git@github.com:randyspauldingamd/MIOpen.git  && mv MIOpen ../r-MIOpen && cd ../r-MIOpen && rmdir ../_rjs'
+
 # moved to xripts/ssha.sh
 # eval "$(ssh-agent -s)"
 # ssh-add ~/.ssh/github_ecdsa
