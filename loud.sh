@@ -1,7 +1,8 @@
 #!/bin/bash
 
 MY_LOG_LEVEL=6
-if [ $# > 0 ]; then MY_LOG_LEVEL=$1; fi
+# TODO: broken cli
+#if [ $# > 0 ]; then MY_LOG_LEVEL=$1; fi
 
 export MIOPEN_ENABLE_LOGGING=1
 export MIOPEN_ENABLE_LOGGING_CMD=1

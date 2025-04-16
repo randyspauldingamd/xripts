@@ -1,5 +1,5 @@
 #!/bin/bash
-# Runs a new ssh-agent and loads the user's key for public github
+# Runs a new ssh-agent and loads the user's key for github-EMU
 
 if [[ "${BASH_SOURCE[0]}" != "${0}" ]] ; then
 
@@ -8,7 +8,7 @@ if [[ "${BASH_SOURCE[0]}" != "${0}" ]] ; then
   fi
 
   ssh-add -D
-  ssh-add ~/.ssh/github_ecdsa
+  ssh-add ~/.ssh/amdeng_rsa
 else
-  echo 'Error: ssha script must be sourced'
+  echo 'Error: sshe script must be sourced'
 fi
